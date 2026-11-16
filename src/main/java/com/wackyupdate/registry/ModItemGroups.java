@@ -32,6 +32,9 @@ public final class ModItemGroups {
 				entries.add(ModBlocks.SPECULUM_LANTERN);
 				entries.add(ModBlocks.FIREFLY_JAR);
 				entries.add(ModBlocks.PRISM_PROJECTOR);
+				entries.add(ModBlocks.SPECULUM_MIRROR);
+				entries.add(ModBlocks.PRISM_SPLITTER);
+				entries.add(ModBlocks.LIGHT_RECEPTOR);
 				entries.add(ModItems.SPECTRE_LENS);
 				entries.add(ModItems.SPECULUM_HELMET);
 				entries.add(ModItems.SPECULUM_CHESTPLATE);

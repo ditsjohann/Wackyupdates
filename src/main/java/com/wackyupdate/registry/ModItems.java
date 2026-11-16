@@ -43,7 +43,8 @@ public final class ModItems {
 			ModBlocks.SLICKWOOD_SAPLING, ModBlocks.SLICKWOOD_RAMP, ModBlocks.SLICKWOOD_FLOOR, ModBlocks.SPECULUM_BLOCK,
 			ModBlocks.POLISHED_SPECULUM, ModBlocks.SPECULUM_BRICKS, ModBlocks.PRISM_TILES, ModBlocks.FIREFLY_JAR,
 			ModBlocks.SKATE_RAIL, ModBlocks.BOOST_PAD, ModBlocks.SLICKWOOD_SLAB, ModBlocks.SLICKWOOD_STAIRS,
-			ModBlocks.SLICKWOOD_FENCE, ModBlocks.PRISM_PROJECTOR}) {
+			ModBlocks.SLICKWOOD_FENCE, ModBlocks.PRISM_PROJECTOR,
+			ModBlocks.SPECULUM_MIRROR, ModBlocks.PRISM_SPLITTER, ModBlocks.LIGHT_RECEPTOR}) {
 			Registry.register(Registries.ITEM, Registries.BLOCK.getId(block), new BlockItem(block, new Item.Settings()));
 		}
 		Registry.register(Registries.ITEM, Registries.BLOCK.getId(ModBlocks.PRISM_GLASS), new PrismGlassItem(ModBlocks.PRISM_GLASS, new Item.Settings()));

@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "power=0": {
+      "model": "wackyupdate:block/light_receptor"
+    },
+    "power=1": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=2": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=3": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=4": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=5": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=6": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=7": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=8": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=9": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=10": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=11": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=12": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=13": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=14": {
+      "model": "wackyupdate:block/light_receptor_on"
+    },
+    "power=15": {
+      "model": "wackyupdate:block/light_receptor_on"
+    }
+  }
+}

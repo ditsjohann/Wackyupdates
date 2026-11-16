@@ -7,6 +7,9 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import com.wackyupdate.registry.ModBlockEntities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.SoundCategory;
@@ -26,9 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Lightshow block. Put a crystal "lens" directly in front of it (prism glass, stained glass,
- * or any speculum crystal for rainbow) and give it redstone. Right-click cycles the show pattern,
- * sneak + right-click shifts its beat offset so several projectors can play off each other.
- * Stronger redstone signal = longer beams. All projectors share one world-time beat, so they sync.
+ * or any speculum crystal for rainbow) and give it redstone. Right-click cycles the mode
+ * (5 shows, FOCUS laser, MUSIC), sneak + right-click shifts its beat offset so several projectors
+ * can play off each other. Stronger redstone signal = longer / stronger beams. All projectors share
+ * one world-time beat, so they sync. Comparators can read the beat back out (see the block entity).
  */
 public class PrismProjectorBlock extends BlockWithEntity {
 	public static final MapCodec<PrismProjectorBlock> CODEC = createCodec(PrismProjectorBlock::new);
@@ -65,6 +69,22 @@ public class PrismProjectorBlock extends BlockWithEntity {
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new PrismProjectorBlockEntity(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		return world.isClient ? null : validateTicker(type, ModBlockEntities.PRISM_PROJECTOR, PrismProjectorBlockEntity::serverTick);
+	}
+
+	@Override
+	public boolean hasComparatorOutput(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+		return world.getBlockEntity(pos) instanceof PrismProjectorBlockEntity projector ? projector.getComparatorOutput() : 0;
 	}
 
 	@Override

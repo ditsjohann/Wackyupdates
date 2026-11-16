@@ -1,7 +1,9 @@
 package com.wackyupdate.client;
 
 import com.wackyupdate.WackyUpdate;
+import com.wackyupdate.block.LightReceptorBlock;
 import com.wackyupdate.block.PrismGlassBlock;
+import net.minecraft.util.DyeColor;
 import com.wackyupdate.client.mechanic.GlimmerNights;
 import com.wackyupdate.client.mechanic.LensVision;
 import com.wackyupdate.client.model.*;
@@ -27,14 +29,22 @@ public class WackyUpdateClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
 			ModBlocks.SPECULUM_CLUSTER, ModBlocks.LARGE_SPECULUM_BUD, ModBlocks.MEDIUM_SPECULUM_BUD, ModBlocks.SMALL_SPECULUM_BUD,
-			ModBlocks.SPECULUM_LANTERN, ModBlocks.SLICKWOOD_SAPLING, ModBlocks.SKATE_RAIL, ModBlocks.BOOST_PAD);
+			ModBlocks.SPECULUM_LANTERN, ModBlocks.SLICKWOOD_SAPLING, ModBlocks.SKATE_RAIL, ModBlocks.BOOST_PAD,
+			ModBlocks.SPECULUM_MIRROR, ModBlocks.LIGHT_RECEPTOR);
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SLICKWOOD_LEAVES, RenderLayer.getCutoutMipped());
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), ModBlocks.PRISM_GLASS, ModBlocks.FIREFLY_JAR);
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), ModBlocks.PRISM_GLASS, ModBlocks.FIREFLY_JAR, ModBlocks.PRISM_SPLITTER);
 
 		ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) ->
 			0xFF000000 | state.get(PrismGlassBlock.COLOR).getEntityColor(), ModBlocks.PRISM_GLASS);
 		ColorProviderRegistry.ITEM.register((stack, tintIndex) ->
 			0xFF000000 | PrismGlassItem.getColor(stack).getEntityColor(), ModBlocks.PRISM_GLASS);
+
+		// Light Receptor: the gem overlay shows the colour filter (white = any colour)
+		ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
+			DyeColor dye = state.get(LightReceptorBlock.FILTER).dye();
+			return 0xFF000000 | (dye == null ? 0xF0FAFF : dye.getEntityColor());
+		}, ModBlocks.LIGHT_RECEPTOR);
+		ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0xFFF0FAFF, ModBlocks.LIGHT_RECEPTOR);
 
 		ParticleFactoryRegistry.getInstance().register(ModParticles.FIREFLY, FireflyParticle.Factory::new);
 		ParticleFactoryRegistry.getInstance().register(ModParticles.PRISM_SPARK, PrismSparkParticle.Factory::new);

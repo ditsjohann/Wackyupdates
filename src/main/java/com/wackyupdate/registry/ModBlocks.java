@@ -79,6 +79,16 @@ public final class ModBlocks {
 		.mapColor(MapColor.IRON_GRAY).strength(3.0f).requiresTool().sounds(BlockSoundGroup.METAL)
 		.luminance(s -> s.get(PrismProjectorBlock.POWERED) ? 9 : 0)));
 
+	// ---------------------------------------------------------------- Light network
+	public static final Block SPECULUM_MIRROR = register("speculum_mirror", new SpeculumMirrorBlock(AbstractBlock.Settings.create()
+		.mapColor(MapColor.CYAN).strength(2.0f).requiresTool().sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
+	public static final Block PRISM_SPLITTER = register("prism_splitter", new PrismSplitterBlock(AbstractBlock.Settings.create()
+		.mapColor(MapColor.CLEAR).strength(1.5f).requiresTool().sounds(BlockSoundGroup.GLASS).nonOpaque()
+		.allowsSpawning((s, w, p, t) -> false).solidBlock((s, w, p) -> false).suffocates((s, w, p) -> false).blockVision((s, w, p) -> false)));
+	public static final Block LIGHT_RECEPTOR = register("light_receptor", new LightReceptorBlock(AbstractBlock.Settings.create()
+		.mapColor(MapColor.IRON_GRAY).strength(2.0f).requiresTool().sounds(BlockSoundGroup.METAL)
+		.luminance(s -> s.get(LightReceptorBlock.POWER) > 0 ? 7 : 0)));
+
 	private static AbstractBlock.Settings crystal() {
 		return AbstractBlock.Settings.create().mapColor(MapColor.CYAN).solid().nonOpaque().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
 			.strength(1.5f).pistonBehavior(PistonBehavior.DESTROY);

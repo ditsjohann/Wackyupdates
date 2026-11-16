@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " P ",
+    "PSP",
+    " P "
+  ],
+  "key": {
+    "P": {
+      "item": "wackyupdate:prism_glass"
+    },
+    "S": {
+      "item": "wackyupdate:speculum_shard"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:prism_splitter",
+    "count": 1
+  }
+}

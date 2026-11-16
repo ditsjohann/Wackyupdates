@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " I ",
+    "SPS",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "wackyupdate:speculum_shard"
+    },
+    "P": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:speculum_mirror",
+    "count": 2
+  }
+}

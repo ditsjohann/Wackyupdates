@@ -13,6 +13,9 @@
     "wackyupdate:prism_tiles",
     "wackyupdate:skate_rail",
     "wackyupdate:boost_pad",
-    "wackyupdate:prism_projector"
+    "wackyupdate:prism_projector",
+    "wackyupdate:speculum_mirror",
+    "wackyupdate:prism_splitter",
+    "wackyupdate:light_receptor"
   ]
 }

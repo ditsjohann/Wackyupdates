@@ -64,18 +64,48 @@ A creamy, glossy tree with mint leaves. You can find it in plains, meadows, fore
   - It flies off boost pads and explosions.
   - **Sneak-punch** it to pick it back up.
 
-## Lightshows: Prism Projector
+## Lightshows & the Prism Light Network
+
+### Prism Projector
 Iron + speculum shard + redstone block.
 1. Place it facing any direction. Its front is the side you clicked.
 2. Put a **crystal lens** directly in front of it:
    - **prism glass** or **stained glass** gives a beam in that colour;
    - **any speculum crystal, speculum block, prism tiles or amethyst** gives a **rainbow** beam;
    - plain glass gives white.
-3. **Power it with redstone.** A stronger signal gives longer beams (up to 36 blocks).
-4. **Right-click** cycles the show: **Sweep, Spin, Strobe, Fan, Disco**.
-5. **Sneak + right-click** shifts its beat offset (1/4 beat steps). This lets you chain projectors into chases.
+3. **Right-click** cycles the mode. **Sneak + right-click** shifts its beat offset in 1/4 beat steps, so you can chain projectors into chases.
+
+| Mode | Activated by | What it does |
+|---|---|---|
+| Sweep, Spin, Strobe, Fan, Disco | redstone | Decorative lightshows. A stronger signal gives longer beams. |
+| **Focus** | redstone | A straight **laser that really travels through the world**. Its **strength = the redstone power going in** (1–15). |
+| **Music** | **note blocks & jukeboxes** within 16 blocks (no redstone needed) | Every note fires a burst of beams in fresh directions, **coloured by the note's pitch** (with a rainbow lens). A playing jukebox makes it dance on the beat. |
 
 Every projector runs on the same world clock (120 BPM), so they all stay in sync.
+
+### Cause → effect
+**What turns lights on:** redstone (on/off plus beam strength), note blocks, jukeboxes, and other Light Receptors (light-powered redstone can switch the next projector).
+
+**What lights do in return:**
+- **Light Receptor** (glass + redstone + shard + iron). It outputs **redstone equal to the strength** of the strongest Focus beam hitting it. It glows when lit.
+  - Right-click with a **dye** to make it react **only to that colour**. Right-click empty-handed to react to anything again. The ring around its eye shows the filter colour.
+  - White and rainbow light contain every colour, so they pass every filter.
+- **Laser tripwires.** Any mob or player that steps into a Focus beam blocks it, and downstream receptors switch off. Solid blocks block it too. Glass, leaves, water and other see-through blocks don't.
+- **Comparator output** from a projector:
+  - Show modes: a **pulse on every beat**, to sync pistons, lamps and note blocks.
+  - Focus mode: **how many receptors** the beam is powering.
+  - Music mode: a short pulse on every note, **1–15 by pitch**.
+- **Grow light.** Aim a Focus beam at **Budding Speculum** and its crystals grow many times faster.
+
+### Steering the beam
+- **Speculum Mirror** (2 per craft: iron + shards + glass pane). A Focus beam that enters it leaves through its mirror face, with no loss. **Right-click any face to point the mirror there**, and sneak-click to point it the opposite way.
+- **Prism Splitter** (prism glass + shard). Lets the beam through **and** sends a copy out of its orange marked face. Each output is 1 strength weaker. Right-click a face to move the side output.
+- **Colour filters.** A beam passing through prism glass or stained glass **takes on that colour** (1 strength weaker). This is how you send different colours to different filtered receptors.
+- Range is 16 + 2 × power blocks per beam, and mirror loops are detected and stopped.
+
+**Example:** red lens → projector (Focus) → mirror → splitter.
+- One branch goes into a red-filtered receptor that drives a door.
+- The other goes through blue glass into a blue-filtered receptor that runs an alarm when someone walks through the beam.
 
 ## The 5 extra features
 1. **Spectre Sight**: use the lens alone to make nearby creatures glow through walls.

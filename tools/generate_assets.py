@@ -471,6 +471,91 @@ def tex_projector_back():
     return img
 
 
+def tex_mirror_face():
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            t = (x + (15 - y)) / 30.0
+            c = mix(hexc("f4feff"), hexc("8fd3dc"), t)
+            if (x - y) % 9 in (0, 1):
+                c = mix(c, (255, 255, 255, 255), 0.6)
+            px[x, y] = c
+    for i in range(16):
+        px[i, 0] = px[0, i] = px[i, 15] = px[15, i] = hexc("2b6b78")
+    return img
+
+
+def tex_mirror_frame():
+    img = tex_metal(16)
+    px = img.load()
+    for i in range(16):
+        px[i, 0] = px[0, i] = px[i, 15] = px[15, i] = SPEC_MID
+    for (x, y) in [(2, 2), (13, 2), (2, 13), (13, 13)]:
+        px[x, y] = SPEC_LIGHT
+    return img
+
+
+def tex_splitter_glass():
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            edge = x in (0, 15) or y in (0, 15)
+            px[x, y] = (210, 240, 250, 210) if edge else (220, 245, 255, 40)
+    for i in range(3, 8):
+        px[i, 10 - i] = (255, 255, 255, 140)
+    return img
+
+
+def tex_splitter_core():
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            px[x, y] = hsv((x + y) / 32.0, 0.55, 1.0)
+    return img
+
+
+def tex_splitter_out():
+    img = new(fill=hexc("ffb12b"))
+    px = img.load()
+    for i in range(16):
+        px[i, 0] = px[0, i] = px[i, 15] = px[15, i] = hexc("ff7a1a")
+    return img
+
+
+def tex_receptor(lit):
+    img = tex_metal(17)
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                px[x, y] = hexc("4d565b")
+            d = math.hypot(x - 7.5, y - 7.5)
+            if d < 5.2:
+                px[x, y] = hexc("1b2226") if not lit else mix(hexc("ffffff"), hexc("ffe27a"), d / 5.2)
+            elif d < 6.3:
+                px[x, y] = hexc("3a4146")
+    if not lit:
+        px[6, 6] = px[7, 6] = hexc("3a4a52")
+    for (x, y) in [(1, 1), (14, 1), (1, 14), (14, 14)]:
+        px[x, y] = hexc("c62828") if not lit else hexc("ff5252")
+    return img
+
+
+def tex_receptor_gem():
+    """Overlay ring tinted with the filter colour."""
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            d = math.hypot(x - 7.5, y - 7.5)
+            if 5.2 <= d < 6.3:
+                px[x, y] = (255, 255, 255, 255) if (x + y) % 3 else (225, 225, 225, 255)
+    return img
+
+
 # ---------------------------------------------------------------------------------- item textures
 def tex_shard():
     img = new()
@@ -966,6 +1051,15 @@ def main():
     save(tex_projector_front(True), "block", "prism_projector_front_on")
     save(tex_projector_back(), "block", "prism_projector_back")
 
+    save(tex_mirror_face(), "block", "speculum_mirror_face")
+    save(tex_mirror_frame(), "block", "speculum_mirror_frame")
+    save(tex_splitter_glass(), "block", "prism_splitter")
+    save(tex_splitter_core(), "block", "prism_splitter_core")
+    save(tex_splitter_out(), "block", "prism_splitter_out")
+    save(tex_receptor(False), "block", "light_receptor")
+    save(tex_receptor(True), "block", "light_receptor_on")
+    save(tex_receptor_gem(), "block", "light_receptor_gem")
+
     save(tex_shard(), "item", "speculum_shard")
     save(tex_lens(), "item", "spectre_lens")
     for kind in ("helmet", "chestplate", "leggings", "boots"):
@@ -1177,6 +1271,35 @@ def main():
     bs("prism_projector", proj)
     item_block("prism_projector")
 
+    # ---- light network
+    six = ("down", "up", "north", "south", "west", "east")
+    bmodel("speculum_mirror", {"parent": "minecraft:block/block", "textures": {
+        "frame": m("block/speculum_mirror_frame"), "mirror": m("block/speculum_mirror_face"), "particle": m("block/speculum_mirror_face")},
+        "elements": [
+            {"from": [2, 0, 2], "to": [14, 2, 14], "faces": {d: {"texture": "#frame", "cullface": "down"} if d == "down" else {"texture": "#frame"} for d in six}},
+            {"from": [1, 2, 1], "to": [15, 14, 15], "faces": {d: {"texture": "#mirror" if d == "up" else "#frame"} for d in six}},
+            {"from": [0, 14, 0], "to": [16, 15, 16], "faces": {d: {"texture": "#mirror" if d == "up" else "#frame"} for d in six}}]})
+    bs("speculum_mirror", {f"facing={f}": dict(model=m("block/speculum_mirror"), **r) for f, r in facing_rot.items()})
+    item_block("speculum_mirror")
+
+    bmodel("prism_splitter", {"parent": "minecraft:block/block", "textures": {
+        "glass": m("block/prism_splitter"), "core": m("block/prism_splitter_core"), "out": m("block/prism_splitter_out"),
+        "particle": m("block/prism_splitter")},
+        "elements": [
+            {"from": [5, 5, 5], "to": [11, 11, 11], "faces": {d: {"texture": "#core"} for d in six}},
+            {"from": [6, 11, 6], "to": [10, 15.9, 10], "faces": {d: {"texture": "#out"} for d in six}},
+            {"from": [0, 0, 0], "to": [16, 16, 16], "faces": {d: {"texture": "#glass", "cullface": d} for d in six}}]})
+    bs("prism_splitter", {f"facing={f}": dict(model=m("block/prism_splitter"), **r) for f, r in facing_rot.items()})
+    item_block("prism_splitter")
+
+    for name, tex in (("light_receptor", "light_receptor"), ("light_receptor_on", "light_receptor_on")):
+        bmodel(name, {"parent": "minecraft:block/block", "textures": {"side": m("block/" + tex), "gem": m("block/light_receptor_gem"), "particle": m("block/" + tex)},
+                      "elements": [
+                          {"from": [0, 0, 0], "to": [16, 16, 16], "faces": {d: {"texture": "#side", "cullface": d} for d in six}},
+                          {"from": [-0.01, -0.01, -0.01], "to": [16.01, 16.01, 16.01], "faces": {d: {"texture": "#gem", "tintindex": 0, "cullface": d} for d in six}}]})
+    bs("light_receptor", {f"power={p}": {"model": m("block/light_receptor" + ("_on" if p else ""))} for p in range(16)})
+    item_block("light_receptor")
+
     # plain items
     for name in ("speculum_shard", "spectre_lens", "speculum_helmet", "speculum_chestplate", "speculum_leggings",
                  "speculum_boots", "mite_foot", "rollerskates", "prism_tonic", "ragdoll_dummy"):
@@ -1189,7 +1312,7 @@ def main():
     for name in ("speculum_lantern", "compacted_feet_block", "slickwood_log", "stripped_slickwood_log", "slickwood_planks",
                  "slickwood_sapling", "slickwood_ramp", "slickwood_floor", "speculum_block", "polished_speculum",
                  "speculum_bricks", "prism_tiles", "firefly_jar", "skate_rail", "boost_pad", "slickwood_stairs",
-                 "slickwood_fence", "prism_projector"):
+                 "slickwood_fence", "prism_projector", "speculum_mirror", "prism_splitter", "light_receptor"):
         loot_self(name)
     for name in ("large_speculum_bud", "medium_speculum_bud", "small_speculum_bud"):
         loot_silk_only(name)
@@ -1261,6 +1384,9 @@ def main():
     shaped("polished_speculum", ["BB", "BB"], {"B": m("speculum_block")}, m("polished_speculum"), 4)
     shaped("speculum_bricks", ["BB", "BB"], {"B": m("polished_speculum")}, m("speculum_bricks"), 4)
     shaped("prism_projector", ["ISI", "IRI", "III"], {"I": "minecraft:iron_ingot", "S": S, "R": "minecraft:redstone_block"}, m("prism_projector"))
+    shaped("speculum_mirror", [" I ", "SPS", " I "], {"I": "minecraft:iron_ingot", "S": S, "P": "minecraft:glass_pane"}, m("speculum_mirror"), 2)
+    shaped("prism_splitter", [" P ", "PSP", " P "], {"P": m("prism_glass"), "S": S}, m("prism_splitter"))
+    shaped("light_receptor", [" G ", "RSR", "III"], {"G": "minecraft:glass", "R": "minecraft:redstone", "S": S, "I": "minecraft:iron_ingot"}, m("light_receptor"))
     shaped("rollerskates", [" B ", "IFI"], {"B": "minecraft:leather_boots", "I": "minecraft:iron_ingot", "F": m("compacted_feet_block")}, m("rollerskates"))
     shapeless("mite_feet_from_block", [m("compacted_feet_block")], m("mite_foot"), 10)
     shapeless("slickwood_planks", ["#" + m("slickwood_logs")], m("slickwood_planks"), 4)
@@ -1279,7 +1405,7 @@ def main():
     tag("block", MC_DATA, "mineable/pickaxe", [m(n) for n in (
         "budding_speculum", "speculum_cluster", "large_speculum_bud", "medium_speculum_bud", "small_speculum_bud",
         "speculum_lantern", "speculum_block", "polished_speculum", "speculum_bricks", "prism_tiles", "skate_rail",
-        "boost_pad", "prism_projector")])
+        "boost_pad", "prism_projector", "speculum_mirror", "prism_splitter", "light_receptor")])
     tag("block", MC_DATA, "mineable/axe", [m(n) for n in (
         "slickwood_log", "stripped_slickwood_log", "slickwood_planks", "slickwood_ramp", "slickwood_floor",
         "slickwood_slab", "slickwood_stairs", "slickwood_fence")])
@@ -1434,6 +1560,13 @@ def main():
         "lightshow.wackyupdate.strobe": "Strobe",
         "lightshow.wackyupdate.fan": "Fan",
         "lightshow.wackyupdate.disco": "Disco",
+        "lightshow.wackyupdate.focus": "Focus (laser)",
+        "lightshow.wackyupdate.music": "Music (note blocks & jukeboxes)",
+        "block.wackyupdate.speculum_mirror": "Speculum Mirror",
+        "block.wackyupdate.prism_splitter": "Prism Splitter",
+        "block.wackyupdate.light_receptor": "Light Receptor",
+        "message.wackyupdate.receptor.filter": "Receptor reacts to: %s",
+        "message.wackyupdate.receptor.any": "any colour",
         "message.wackyupdate.trick": "Trick! +%2$s XP",
         "message.wackyupdate.trick_combo": "%sx Trick Combo! +%s XP",
         "message.wackyupdate.need_feet": "Need %s more feet",

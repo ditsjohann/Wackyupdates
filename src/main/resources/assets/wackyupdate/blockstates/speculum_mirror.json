@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "wackyupdate:block/speculum_mirror"
+    },
+    "facing=down": {
+      "model": "wackyupdate:block/speculum_mirror",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "wackyupdate:block/speculum_mirror",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "wackyupdate:block/speculum_mirror",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "wackyupdate:block/speculum_mirror",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "wackyupdate:block/speculum_mirror",
+      "x": 90,
+      "y": 270
+    }
+  }
+}
