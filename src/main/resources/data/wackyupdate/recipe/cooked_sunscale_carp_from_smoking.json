@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "ingredient": {
+    "item": "wackyupdate:sunscale_carp"
+  },
+  "result": {
+    "id": "wackyupdate:cooked_sunscale_carp"
+  },
+  "experience": 0.35,
+  "cookingtime": 100
+}

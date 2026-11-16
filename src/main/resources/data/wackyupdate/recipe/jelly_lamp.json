@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "JJ",
+    "JJ"
+  ],
+  "key": {
+    "J": {
+      "item": "wackyupdate:jelly_gel"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:jelly_lamp",
+    "count": 1
+  }
+}

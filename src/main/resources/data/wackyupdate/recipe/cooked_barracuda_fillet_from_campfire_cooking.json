@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "wackyupdate:barracuda_fillet"
+  },
+  "result": {
+    "id": "wackyupdate:cooked_barracuda_fillet"
+  },
+  "experience": 0.35,
+  "cookingtime": 600
+}

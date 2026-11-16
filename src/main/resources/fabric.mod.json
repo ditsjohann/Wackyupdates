@@ -2,13 +2,14 @@
 	"schemaVersion": 1,
 	"id": "wackyupdate",
 	"version": "${version}",
-	"name": "WackyUpdate-V1",
-	"description": "Speculum crystals, prism glass, gravel mites, rollerskates, ragdolls, lightshows and a handful of odd new critters.",
+	"name": "WackyUpdate",
+	"description": "V1: speculum crystals, prism glass, gravel mites, rollerskates, ragdolls, lightshows and the Prism Light Network. V2: the Aquatic update - 10 new sea creatures and a living ocean ecosystem.",
 	"authors": ["ditsjohann"],
 	"contact": {},
 	"license": "All-Rights-Reserved",
 	"icon": "assets/wackyupdate/icon.png",
 	"environment": "*",
+	"accessWidener": "wackyupdate.accesswidener",
 	"entrypoints": {
 		"main": ["com.wackyupdate.WackyUpdate"],
 		"client": ["com.wackyupdate.client.WackyUpdateClient"]

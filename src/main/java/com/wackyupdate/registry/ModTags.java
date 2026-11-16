@@ -14,5 +14,8 @@ public final class ModTags {
 	/** Mobs that turn into a ragdoll when they die. */
 	public static final TagKey<EntityType<?>> RAGDOLLS = TagKey.of(RegistryKeys.ENTITY_TYPE, WackyUpdate.id("ragdolls"));
 
+	/** Sea creatures that small fish recognise as danger and flee from. */
+	public static final TagKey<EntityType<?>> AQUATIC_PREDATORS = TagKey.of(RegistryKeys.ENTITY_TYPE, WackyUpdate.id("aquatic_predators"));
+
 	private ModTags() {}
 }

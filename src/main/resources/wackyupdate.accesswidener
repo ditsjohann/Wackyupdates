@@ -1,0 +1,3 @@
+accessWidener v2 named
+# Lets the aquatic ecosystem give vanilla fish a "flee from predators" goal (no mixins needed).
+accessible field net/minecraft/entity/mob/MobEntity goalSelector Lnet/minecraft/entity/ai/goal/GoalSelector;

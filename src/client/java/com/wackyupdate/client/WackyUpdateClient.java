@@ -73,6 +73,7 @@ public class WackyUpdateClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(ModBlockEntities.PRISM_PROJECTOR, PrismProjectorRenderer::new);
 
 		LensVision.init();
+		com.wackyupdate.client.aquatic.AquaticClient.init();
 		GlimmerNights.init();
 	}
 

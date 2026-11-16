@@ -10,6 +10,8 @@ public final class ModParticles {
 	public static final SimpleParticleType FIREFLY = Registry.register(Registries.PARTICLE_TYPE, WackyUpdate.id("firefly"), FabricParticleTypes.simple(true));
 	public static final SimpleParticleType PRISM_SPARK = Registry.register(Registries.PARTICLE_TYPE, WackyUpdate.id("prism_spark"), FabricParticleTypes.simple(true));
 
+	public static final SimpleParticleType PLANKTON = Registry.register(Registries.PARTICLE_TYPE, WackyUpdate.id("plankton"), FabricParticleTypes.simple(true));
+
 	public static void init() {}
 
 	private ModParticles() {}

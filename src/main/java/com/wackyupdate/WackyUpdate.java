@@ -25,10 +25,14 @@ public class WackyUpdate implements ModInitializer {
 		ModArmorMaterials.init();
 		ModItems.init();
 		ModEffects.init();
+		ModAquaticBlocks.init();
+		ModAquaticEntities.init();
+		ModAquaticItems.init();
 		ModItemGroups.init();
 		ModWorldGen.init();
 		SkateHandler.init();
 		RagdollHandler.init();
-		LOGGER.info("WackyUpdate-V1 loaded. Mind the gravel.");
+		com.wackyupdate.aquatic.AquaticEcosystem.init();
+		LOGGER.info("WackyUpdate loaded. Mind the gravel - and the piranhas.");
 	}
 }

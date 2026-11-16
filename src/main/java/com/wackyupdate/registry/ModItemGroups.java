@@ -67,6 +67,28 @@ public final class ModItemGroups {
 			})
 			.build());
 
+	public static final ItemGroup AQUATIC = Registry.register(Registries.ITEM_GROUP, WackyUpdate.id("aquatic"),
+		FabricItemGroup.builder()
+			.icon(() -> new ItemStack(ModAquaticItems.GLIMMERFIN_BUCKET))
+			.displayName(Text.translatable("itemGroup.wackyupdate.aquatic"))
+			.entries((context, entries) -> {
+				for (net.minecraft.item.Item item : new net.minecraft.item.Item[]{
+					ModAquaticItems.GLIMMERFIN, ModAquaticItems.SUNSCALE_CARP, ModAquaticItems.COOKED_SUNSCALE_CARP,
+					ModAquaticItems.PIRANHA, ModAquaticItems.COOKED_PIRANHA, ModAquaticItems.BARRACUDA_FILLET,
+					ModAquaticItems.COOKED_BARRACUDA_FILLET, ModAquaticItems.JELLY_GEL, ModAquaticItems.STINGRAY_BARB,
+					ModAquaticItems.PIRANHA_TOOTH, ModAquaticItems.ANGLER_LURE, ModAquaticItems.HERMIT_SHELL,
+					ModAquaticBlocks.ANGLER_LANTERN.asItem(), ModAquaticBlocks.JELLY_LAMP.asItem(), ModAquaticBlocks.GLOW_ANEMONE.asItem(),
+					ModAquaticItems.GLIMMERFIN_BUCKET, ModAquaticItems.SUNSCALE_CARP_BUCKET, ModAquaticItems.SEAHORSE_BUCKET,
+					ModAquaticItems.SEA_BUNNY_BUCKET, ModAquaticItems.PIRANHA_BUCKET,
+					ModAquaticItems.GLIMMERFIN_SPAWN_EGG, ModAquaticItems.SUNSCALE_CARP_SPAWN_EGG, ModAquaticItems.SEA_BUNNY_SPAWN_EGG,
+					ModAquaticItems.HERMIT_CRAB_SPAWN_EGG, ModAquaticItems.SEAHORSE_SPAWN_EGG, ModAquaticItems.DRIFT_JELLY_SPAWN_EGG,
+					ModAquaticItems.STINGRAY_SPAWN_EGG, ModAquaticItems.PIRANHA_SPAWN_EGG, ModAquaticItems.REEF_BARRACUDA_SPAWN_EGG,
+					ModAquaticItems.DEEP_ANGLER_SPAWN_EGG}) {
+					entries.add(item);
+				}
+			})
+			.build());
+
 	public static void init() {}
 
 	private ModItemGroups() {}

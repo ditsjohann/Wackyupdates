@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:reef_barracuda",
+    "wackyupdate:piranha",
+    "minecraft:dolphin",
+    "minecraft:axolotl",
+    "minecraft:guardian",
+    "minecraft:elder_guardian",
+    "minecraft:drowned"
+  ]
+}

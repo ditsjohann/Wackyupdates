@@ -1,0 +1,137 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "t": "wackyupdate:block/angler_lantern",
+    "particle": "wackyupdate:block/angler_lantern"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        8,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#t",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#t",
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ]
+        },
+        "north": {
+          "texture": "#t",
+          "uv": [
+            0,
+            1,
+            8,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#t",
+          "uv": [
+            0,
+            1,
+            8,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#t",
+          "uv": [
+            0,
+            1,
+            8,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#t",
+          "uv": [
+            0,
+            1,
+            8,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        8,
+        5
+      ],
+      "to": [
+        11,
+        10,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#t",
+          "uv": [
+            9,
+            1,
+            15,
+            7
+          ]
+        },
+        "north": {
+          "texture": "#t",
+          "uv": [
+            0,
+            10,
+            6,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#t",
+          "uv": [
+            0,
+            10,
+            6,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#t",
+          "uv": [
+            0,
+            10,
+            6,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#t",
+          "uv": [
+            0,
+            10,
+            6,
+            12
+          ]
+        }
+      }
+    }
+  ]
+}

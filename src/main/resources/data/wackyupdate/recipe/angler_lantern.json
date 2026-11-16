@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " N ",
+    "GLG",
+    " G "
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "L": {
+      "item": "wackyupdate:angler_lure"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:angler_lantern",
+    "count": 1
+  }
+}

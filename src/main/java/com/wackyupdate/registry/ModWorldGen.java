@@ -28,6 +28,8 @@ public final class ModWorldGen {
 		BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.PLAINS, BiomeKeys.SUNFLOWER_PLAINS, BiomeKeys.MEADOW,
 			BiomeKeys.FOREST, BiomeKeys.BIRCH_FOREST, BiomeKeys.FLOWER_FOREST, BiomeKeys.SAVANNA, BiomeKeys.CHERRY_GROVE),
 			GenerationStep.Feature.VEGETAL_DECORATION, placed("slickwood_tree"));
+		BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.WARM_OCEAN, BiomeKeys.LUKEWARM_OCEAN, BiomeKeys.DEEP_LUKEWARM_OCEAN),
+			GenerationStep.Feature.VEGETAL_DECORATION, placed("glow_anemone_reef"));
 	}
 
 	private ModWorldGen() {}

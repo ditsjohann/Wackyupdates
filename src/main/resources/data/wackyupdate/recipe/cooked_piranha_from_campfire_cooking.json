@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "wackyupdate:piranha"
+  },
+  "result": {
+    "id": "wackyupdate:cooked_piranha"
+  },
+  "experience": 0.35,
+  "cookingtime": 600
+}

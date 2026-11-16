@@ -1,9 +1,12 @@
-# WackyUpdate-V1
+# WackyUpdate
 
 A Fabric mod for **Minecraft 1.21.1** (Java 21, Gradle, Fabric API).
 
+- **V1** — speculum crystals, prism glass, gravel mites, rollerskates, ragdolls, lightshows and the Prism Light Network
+- **V2** — **the Aquatic update**: 10 new sea creatures and a living ocean ([jump to it](#v2--the-aquatic-update))
+
 ```
-./gradlew build          # -> build/libs/WackyUpdate-V1-1.0.0.jar
+./gradlew build          # -> build/libs/WackyUpdate-V2-2.0.0.jar
 ./gradlew runClient      # dev client
 ```
 
@@ -134,7 +137,38 @@ Block of Speculum, Polished Speculum, Speculum Bricks (these chime like amethyst
 
 ---
 
+# V2 — The Aquatic Update
+
+## 10 new sea creatures
+| Creature | Temper | Where | Notes |
+|---|---|---|---|
+| **Glimmerfin** | passive | all non-frozen oceans | Small glowing fish in schools of up to 10, in 4 colours. Bucketable. Eating one gives Night Vision. |
+| **Sunscale Carp** | passive | rivers, swamps | A chunky golden fish. Cook it for a solid meal. Bucketable. |
+| **Sea Bunny** | passive | warm & lukewarm ocean floor | A fluffy sea slug that crawls along the bottom. Bucketable. |
+| **Hermit Crab** | passive | beaches (breathes air *and* water) | Comes in 5 shell colours. **Ducks into its shell** when you walk up (sneak to get close), and takes less damage while hidden. Every so often it outgrows its shell and drops a **Hermit Shell**. Breed with kelp. |
+| **Seahorse** | passive | warm/lukewarm/regular ocean | Follows seagrass and clings to kelp to rest. **Feed it seagrass and it gives you Conduit Power for 30 s** (once a minute per seahorse). Bucketable. |
+| **Drift Jelly** | neutral | oceans, near the surface | Drifts and pulses, glowing softly. Never attacks, but **touching it stings** (poison + slowness). Sea creatures are immune. |
+| **Stingray** | neutral | warm ocean floors (sand) | Glides along the bottom. Stings (poison II) if you hit it **or touch it without sneaking**, so shuffle carefully. |
+| **Piranha** | hostile | jungle, swamp & mangrove waters | Swarms in schools. Attacks swimmers, and **any creature below half health that enters the water**. Bucketable, if you dare. |
+| **Reef Barracuda** | hostile | warm & lukewarm oceans | A fast reef hunter that **eats fish** (healing as it does), attacks swimmers, and **dashes** at its prey. |
+| **Deep Angler** | hostile | deep oceans, in the dark | Lurks behind a **glowing lure**. Fish don't see it as a threat and **swim right up to the light** before getting eaten. Hits very hard with a sudden lunge. |
+
+## The living ocean (aquatic life update)
+- **Food chain.** Every fish, vanilla cod, salmon, tropical fish and pufferfish included, now **flees from predators**: barracudas, piranhas, dolphins, axolotls, guardians and drowned (`#wackyupdate:aquatic_predators`). Barracudas and anglers really hunt and eat fish, and axolotls hunt glimmerfin, carp and piranhas.
+- **Bioluminescent plankton.** On ocean nights the sea surface sparkles. In the deep (20+ blocks below sea level) it glows around you day and night.
+- **Biome fishing.** Catches depend on where you fish: glimmerfin in oceans, sunscale carp in rivers, piranhas in jungle, swamp and mangrove waters.
+- **Glow Anemone reefs** grow in warm oceans. They give off light and **sting hostile mobs only**, so reefs are safe havens for fish.
+- **Angler Lantern** (made from an Angler Lure). Placed underwater, it **draws in all sea life** within 16 blocks, which is great for fishing or catching fish in buckets. Predators come too.
+- **Jelly Lamp** (4 Jelly Gel): a glowing, bouncy, wobbly block.
+- **Brewing**: an awkward potion plus a Stingray Barb makes **Poison**; plus a Piranha Tooth makes **Strength**.
+- **Cooking**: carp, piranha and barracuda fillets cook in a furnace, smoker or campfire.
+- **Buckets** for glimmerfin, carp, seahorse, sea bunny and piranha.
+- Everything is in the new **WackyUpdate: Aquatic** creative tab.
+
+---
+
 ### Project layout
-- `src/main/java`: common code (blocks, items, entities, world gen, skate and ragdoll handlers)
+- `src/main/java`: common code (blocks, items, entities, world gen, skate and ragdoll handlers). V2 lives in `entity/aquatic`, `aquatic/AquaticEcosystem` and the `ModAquatic*` registries
+- `src/main/resources/wackyupdate.accesswidener`: opens up mob AI goals so vanilla fish can learn to flee (no mixins)
 - `src/client/java`: rendering (entity models, projector beams, lens x-ray, fireflies, Glimmer Nights)
 - `tools/generate_assets.py`: generates **every** texture, model, blockstate, loot table, recipe, tag, worldgen file and the lang file. Edit it and re-run `python3 tools/generate_assets.py` (needs Pillow). All textures are procedural placeholder art, so swap in hand-drawn PNGs any time.

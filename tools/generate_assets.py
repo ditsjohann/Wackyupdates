@@ -1001,8 +1001,14 @@ def shapeless(name, ingredients, result, count=1):
                   "result": {"id": result, "count": count}})
 
 
+_written_tags = {}
+
+
 def tag(registry, namespace_dir, name, values):
-    write_json(os.path.join(namespace_dir, "tags", registry, name + ".json"), {"replace": False, "values": values})
+    path = os.path.join(namespace_dir, "tags", registry, name + ".json")
+    merged = _written_tags.setdefault(path, [])
+    merged += [v for v in values if v not in merged]
+    write_json(path, {"replace": False, "values": merged})
 
 
 def entity_loot(name, pools):
@@ -1017,6 +1023,452 @@ def drop_pool(item, lo, hi, looting=True, extra_functions=None):
                       "count": {"type": "minecraft:uniform", "min": 0, "max": 1}})
     funcs += extra_functions or []
     return {"rolls": 1, "entries": [{"type": "minecraft:item", "name": item, "functions": funcs}]}
+
+
+# ======================================================================================= V2 aquatic
+def scales(pal, seed):
+    rng = random.Random(seed)
+
+    def fn(face, x, y, fw, fh):
+        c = pal[(x + y * 2) % len(pal)] if rng.random() < 0.7 else rng.choice(pal)
+        if face == "bottom":
+            c = mix(c, (255, 255, 255, 255), 0.45)
+        return c
+    return fn
+
+
+def with_eye(base, eye=hexc("101010"), at=(0, 0)):
+    def fn(face, x, y, fw, fh):
+        if face in ("west", "east") and (x, y) == ((fw - 1 - at[0]) if face == "west" else at[0], at[1]):
+            return eye
+        return base(face, x, y, fw, fh)
+    return fn
+
+
+def fin(color):
+    return lambda face, x, y, fw, fh: color if (x + y) % 3 else shade(color, 0.8)
+
+
+GLIMMER_HUES = [0.52, 0.9, 0.12, 0.75]
+
+
+def ent_glimmerfin(variant, glow):
+    img = new(32, 32)
+    h = GLIMMER_HUES[variant]
+    if glow:
+        stripe = hsv(h, 0.35, 1.0)
+        paint_box(img, 0, 0, 2, 3, 6, lambda f, x, y, fw, fh: stripe if f in ("west", "east") and y == 1 else (0, 0, 0, 0))
+        paint_box(img, 16, 0, 0, 3, 3, lambda f, x, y, fw, fh: stripe if (x + y) % 2 == 0 else (0, 0, 0, 0))
+        return img
+    body = scales([hsv(h, 0.65, 0.75), hsv(h, 0.55, 0.85), hsv(h + 0.03, 0.7, 0.65)], 50 + variant)
+    paint_box(img, 0, 0, 2, 3, 6, with_eye(body, at=(0, 0)))
+    paint_box(img, 16, 0, 0, 3, 3, fin(hsv(h, 0.4, 0.95)))
+    paint_box(img, 16, 6, 0, 1, 3, fin(hsv(h, 0.4, 0.95)))
+    return img
+
+
+def ent_carp():
+    img = new(64, 32)
+    body = scales([hexc("e0a420"), hexc("f2bf3a"), hexc("c98a12"), hexc("f7d264")], 60)
+    paint_box(img, 0, 0, 4, 5, 9, body)
+    paint_box(img, 0, 14, 3, 4, 3, with_eye(scales([hexc("d4961a"), hexc("e6ab2a")], 61), at=(0, 1)))
+    paint_box(img, 28, 0, 0, 5, 5, fin(hexc("f08a24")))
+    paint_box(img, 28, 10, 0, 2, 6, fin(hexc("f08a24")))
+    return img
+
+
+def ent_sea_bunny():
+    img = new(32, 32)
+    rng = random.Random(62)
+    paint_box(img, 0, 0, 3, 2, 5, lambda f, x, y, fw, fh: hexc("1a1a1a") if rng.random() < 0.12 else rng.choice([hexc("ffffff"), hexc("f2f2f0"), hexc("fffbe8")]))
+    paint_box(img, 0, 8, 1, 2, 1, lambda f, x, y, fw, fh: hexc("1a1a1a") if y == 0 else hexc("f7e27a"))
+    paint_box(img, 6, 8, 2, 1, 1, lambda *a: hexc("fff6c8"))
+    return img
+
+
+def ent_hermit_crab():
+    img = new(64, 32)
+    red = scales([hexc("d8553a"), hexc("c94a30"), hexc("e8704f")], 63)
+    paint_box(img, 0, 0, 4, 2, 3, red)
+    paint_box(img, 14, 0, 2, 2, 2, lambda f, x, y, fw, fh: hexc("f2d7a6") if f == "north" else hexc("d8553a"))
+    paint_box(img, 0, 5, 1, 2, 1, lambda f, x, y, fw, fh: hexc("101010") if y == 0 else hexc("e8704f"))
+    paint_box(img, 0, 8, 3, 1, 1, lambda *a: hexc("c94a30"))
+
+    def shell(face, x, y, fw, fh):  # pale spiral, tinted per crab
+        cx, cy = (fw - 1) / 2, (fh - 1) / 2
+        r = math.hypot(x - cx, y - cy)
+        a = math.atan2(y - cy, x - cx)
+        return [hexc("ffffff"), hexc("e3e3e3"), hexc("c8c8c8")][int(r * 1.4 + a / math.pi * 1.5) % 3]
+    paint_box(img, 0, 12, 6, 5, 6, shell)
+    return img
+
+
+def ent_seahorse():
+    img = new(32, 32)
+    body = scales([hexc("f28c28"), hexc("ffa640"), hexc("e07a1a")], 64)
+
+    def ridged(face, x, y, fw, fh):
+        return hexc("c9631a") if y % 2 == 0 and face in ("south",) else body(face, x, y, fw, fh)
+    paint_box(img, 0, 0, 2, 6, 2, ridged)
+    paint_box(img, 8, 0, 2, 2, 3, with_eye(body, at=(1, 0)))
+    paint_box(img, 20, 0, 1, 1, 2, lambda *a: hexc("ffb450"))
+    paint_box(img, 0, 8, 1, 4, 1, ridged)
+    paint_box(img, 4, 8, 1, 2, 1, ridged)
+    paint_box(img, 8, 6, 0, 3, 2, fin(hexc("ffd25a")))
+    return img
+
+
+def ent_drift_jelly(glow):
+    img = new(64, 32)
+    if glow:
+        def rim(face, x, y, fw, fh):
+            if face in ("north", "south", "west", "east") and y == fh - 1:
+                return hexc("d6a6ff")
+            if face == "top" and (x + y) % 5 == 0:
+                return hexc("b8f4ff")
+            return (0, 0, 0, 0)
+        paint_box(img, 0, 0, 8, 4, 8, rim)
+        paint_box(img, 32, 0, 1, 9, 1, lambda f, x, y, fw, fh: hexc("ffb8ff") if y % 3 == 0 else (0, 0, 0, 0))
+        return img
+
+    def bell(face, x, y, fw, fh):
+        t = y / max(1, fh - 1)
+        return (210, 160, 255, int(150 + 60 * (1 - t))) if (x + y) % 4 else (240, 210, 255, 210)
+    paint_box(img, 0, 0, 8, 4, 8, bell)
+    paint_box(img, 32, 0, 1, 9, 1, lambda f, x, y, fw, fh: (230, 180, 255, 170))
+    paint_box(img, 36, 0, 2, 7, 2, lambda f, x, y, fw, fh: (255, 200, 240, 190) if y % 2 else (240, 170, 230, 190))
+    return img
+
+
+def ent_stingray():
+    img = new(64, 32)
+    rng = random.Random(65)
+    top = [hexc("8a7a63"), hexc("7d6e58"), hexc("97876e")]
+
+    def body(face, x, y, fw, fh):
+        if face == "bottom":
+            return hexc("e8e1d6")
+        if face == "top" and rng.random() < 0.08:
+            return hexc("4a4034")
+        return rng.choice(top)
+    paint_box(img, 0, 0, 4, 2, 9, with_eye(body, at=(1, 0)))
+    paint_box(img, 0, 12, 5, 1, 8, body)
+    paint_box(img, 26, 0, 1, 1, 10, lambda f, x, y, fw, fh: hexc("3d342a") if (f in ("west", "east") and x > 6) else hexc("6e604c"))
+    return img
+
+
+def ent_piranha(glow):
+    img = new(32, 32)
+    if glow:
+        paint_box(img, 0, 0, 2, 4, 5, lambda f, x, y, fw, fh: hexc("ff3030") if f in ("west", "east") and (x, y) == ((fw - 1) if f == "west" else 0, 0) else (0, 0, 0, 0))
+        return img
+
+    def body(face, x, y, fw, fh):
+        if face in ("west", "east"):
+            if y >= fh - 2:
+                return hexc("d22f2f") if (x + y) % 3 else hexc("b02424")
+            return hexc("8f9aa3") if (x + y) % 3 else hexc("7a858e")
+        if face == "bottom":
+            return hexc("d22f2f")
+        return hexc("6f7a83")
+    paint_box(img, 0, 0, 2, 4, 5, body)
+    paint_box(img, 0, 9, 2, 1, 2, lambda f, x, y, fw, fh: hexc("ffffff") if f in ("north", "west", "east") and x % 2 == 0 else hexc("b02424"))
+    paint_box(img, 14, 0, 0, 4, 3, fin(hexc("5e6870")))
+    paint_box(img, 14, 7, 0, 2, 3, fin(hexc("5e6870")))
+    return img
+
+
+def ent_barracuda():
+    img = new(64, 32)
+
+    def body(face, x, y, fw, fh):
+        if face == "bottom":
+            return hexc("eef2f5")
+        if face in ("west", "east") and x % 4 == 0 and y < fh - 1:
+            return hexc("2f3a45")
+        if face == "top":
+            return hexc("4d5a66")
+        return hexc("c3ccd3") if (x + y) % 3 else hexc("b0bac2")
+    paint_box(img, 0, 0, 3, 3, 14, body)
+    paint_box(img, 0, 17, 2, 2, 4, with_eye(body, eye=hexc("f2d23a"), at=(1, 0)))
+    paint_box(img, 12, 17, 2, 1, 4, lambda f, x, y, fw, fh: hexc("ffffff") if f in ("west", "east") and x % 2 == 0 else hexc("c3ccd3"))
+    paint_box(img, 34, 0, 0, 5, 5, fin(hexc("3c4854")))
+    paint_box(img, 34, 10, 0, 2, 4, fin(hexc("3c4854")))
+    return img
+
+
+def ent_angler(glow):
+    img = new(64, 64)
+    if glow:
+        paint_box(img, 48, 0, 2, 2, 2, lambda *a: hexc("b6fff0"))
+        paint_box(img, 0, 0, 10, 8, 12, lambda f, x, y, fw, fh: hexc("7fffd4") if f in ("west", "east") and (x, y) in ((2, 1), (fw - 3, 1)) else (0, 0, 0, 0))
+        return img
+    rng = random.Random(66)
+    dark = [hexc("1b1f2e"), hexc("232838"), hexc("161925")]
+
+    def skin(face, x, y, fw, fh):
+        if rng.random() < 0.05:
+            return hexc("3a4060")
+        return rng.choice(dark)
+    paint_box(img, 0, 0, 10, 8, 12, skin)
+
+    def jaw(face, x, y, fw, fh):
+        if face in ("north", "west", "east") and y == 0 and x % 2 == 0:
+            return hexc("e8e4d8")
+        return rng.choice(dark)
+    paint_box(img, 0, 20, 9, 2, 9, jaw)
+    paint_box(img, 44, 0, 1, 6, 1, lambda *a: hexc("2b3045"))
+    paint_box(img, 48, 0, 2, 2, 2, lambda *a: hexc("7fffd4"))
+    paint_box(img, 0, 32, 0, 6, 6, fin(hexc("2b3045")))
+    return img
+
+
+def item_fish(body_col, fin_col, eye=hexc("101010"), cooked=False, long=False):
+    img = new()
+    d = ImageDraw.Draw(img)
+    if long:
+        d.polygon([(1, 9), (4, 7), (12, 7), (14, 8), (12, 10), (4, 10)], fill=body_col)
+        d.polygon([(12, 8), (15, 5), (15, 12)], fill=fin_col)
+        d.point((3, 8), fill=eye)
+    else:
+        d.ellipse([2, 5, 11, 11], fill=body_col)
+        d.polygon([(10, 8), (14, 4), (14, 12)], fill=fin_col)
+        d.point((4, 7), fill=eye)
+    if cooked:
+        for x in range(3, 11, 3):
+            d.line([(x, 6), (x + 1, 10)], fill=shade(body_col, 0.7))
+    return img
+
+
+def item_bucket(fish_col):
+    img = new()
+    d = ImageDraw.Draw(img)
+    d.polygon([(2, 4), (13, 4), (12, 14), (3, 14)], fill=hexc("a7a7a7"), outline=hexc("5d5d5d"))
+    d.rectangle([3, 4, 12, 6], fill=hexc("3f76e4"))
+    d.ellipse([5, 6, 10, 10], fill=fish_col)
+    d.line([(2, 4), (13, 4)], fill=hexc("d8d8d8"))
+    d.arc([3, 0, 12, 8], 180, 360, fill=hexc("5d5d5d"))
+    return img
+
+
+def item_simple(shape, col, col2):
+    img = new()
+    d = ImageDraw.Draw(img)
+    if shape == "gel":
+        d.ellipse([3, 5, 12, 13], fill=col)
+        d.ellipse([5, 6, 8, 9], fill=col2)
+    elif shape == "barb":
+        d.line([(3, 13), (12, 3)], fill=col, width=2)
+        d.polygon([(12, 1), (14, 4), (11, 4)], fill=col2)
+        for i in range(4, 12, 2):
+            d.point((i, 15 - i - 1), fill=col2)
+    elif shape == "tooth":
+        d.polygon([(5, 3), (11, 3), (8, 14)], fill=col, outline=col2)
+    elif shape == "lure":
+        d.line([(8, 1), (8, 8)], fill=col2)
+        d.ellipse([5, 8, 11, 14], fill=col)
+        d.ellipse([6, 9, 8, 11], fill=(255, 255, 255, 255))
+    elif shape == "shell":
+        d.polygon([(3, 12), (13, 12), (11, 5), (8, 3), (5, 5)], fill=col, outline=col2)
+        for i in range(5, 12, 2):
+            d.line([(8, 4), (i, 12)], fill=col2)
+    return img
+
+
+def tex_anemone():
+    img = new()
+    d = ImageDraw.Draw(img)
+    for i, x in enumerate(range(2, 15, 2)):
+        h = 8 + (i * 5) % 6
+        col = hexc("ff6fb5") if i % 2 else hexc("ff9ad0")
+        d.line([(8, 15), (x, 15 - h)], fill=col)
+        d.point((x, 15 - h), fill=hexc("fff0a0"))
+    d.rectangle([6, 13, 10, 15], fill=hexc("b0306f"))
+    return img
+
+
+def tex_jelly_lamp():
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            edge = x in (0, 15) or y in (0, 15)
+            d = math.hypot(x - 7.5, y - 7.5)
+            px[x, y] = (230, 150, 255, 230) if edge else (240, int(170 + 40 * (d / 11)), 255, 170)
+    for (x, y) in [(4, 4), (5, 4), (4, 5), (10, 9), (11, 10)]:
+        px[x, y] = (255, 255, 255, 240)
+    return img
+
+
+def tex_angler_lantern():
+    img = new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            if y < 10 and x < 8:  # side
+                edge = x in (0, 7) or y in (0, 9)
+                d = math.hypot(x - 3.5, y - 5)
+                px[x, y] = hexc("2b3045") if edge else (mix(hexc("e6fffa"), hexc("4fd6b8"), min(1, d / 4)))
+            elif y < 8 and 8 <= x < 16:  # top/bottom
+                px[x, y] = hexc("2b3045") if x in (8, 15) or y in (0, 7) else hexc("3a4060")
+            elif y >= 10 and x < 8:  # cap side
+                px[x, y] = hexc("1b1f2e")
+    return img
+
+
+def particle_plankton():
+    img = new(4, 4)
+    px = img.load()
+    for y in range(4):
+        for x in range(4):
+            d = math.hypot(x - 1.5, y - 1.5)
+            px[x, y] = (255, 255, 255, int(255 * max(0, 1 - d / 2.2)))
+    return img
+
+
+def aquatic_assets():
+    for v in range(4):
+        save(ent_glimmerfin(v, False), "entity", f"glimmerfin_{v}")
+        save(ent_glimmerfin(v, True), "entity", f"glimmerfin_glow_{v}")
+    save(ent_carp(), "entity", "sunscale_carp")
+    save(ent_sea_bunny(), "entity", "sea_bunny")
+    save(ent_hermit_crab(), "entity", "hermit_crab")
+    save(ent_seahorse(), "entity", "seahorse")
+    save(ent_drift_jelly(False), "entity", "drift_jelly")
+    save(ent_drift_jelly(True), "entity", "drift_jelly_glow")
+    save(ent_stingray(), "entity", "stingray")
+    save(ent_piranha(False), "entity", "piranha")
+    save(ent_piranha(True), "entity", "piranha_glow")
+    save(ent_barracuda(), "entity", "reef_barracuda")
+    save(ent_angler(False), "entity", "deep_angler")
+    save(ent_angler(True), "entity", "deep_angler_glow")
+
+    save(item_fish(hsv(0.52, 0.6, 0.8), hsv(0.52, 0.35, 1.0)), "item", "glimmerfin")
+    save(item_fish(hexc("e0a420"), hexc("f08a24")), "item", "sunscale_carp")
+    save(item_fish(hexc("c98a4a"), hexc("a8703a"), cooked=True), "item", "cooked_sunscale_carp")
+    save(item_fish(hexc("8f9aa3"), hexc("d22f2f")), "item", "piranha")
+    save(item_fish(hexc("b08a6a"), hexc("8a6a4a"), cooked=True), "item", "cooked_piranha")
+    save(item_fish(hexc("e8b0a0"), hexc("c3ccd3"), long=True), "item", "barracuda_fillet")
+    save(item_fish(hexc("c9906a"), hexc("a8703a"), cooked=True, long=True), "item", "cooked_barracuda_fillet")
+    save(item_simple("gel", (220, 150, 255, 220), (250, 230, 255, 255)), "item", "jelly_gel")
+    save(item_simple("barb", hexc("6e604c"), hexc("3d342a")), "item", "stingray_barb")
+    save(item_simple("tooth", hexc("f4f0e4"), hexc("b8b0a0")), "item", "piranha_tooth")
+    save(item_simple("lure", hexc("7fffd4"), hexc("2b3045")), "item", "angler_lure")
+    save(item_simple("shell", hexc("f2d7a6"), hexc("c49a6a")), "item", "hermit_shell")
+    for name, col in (("glimmerfin", hsv(0.52, 0.6, 0.9)), ("sunscale_carp", hexc("e0a420")), ("seahorse", hexc("f28c28")),
+                      ("sea_bunny", hexc("ffffff")), ("piranha", hexc("d22f2f"))):
+        save(item_bucket(col), "item", name + "_bucket")
+    save(tex_anemone(), "block", "glow_anemone")
+    save(tex_jelly_lamp(), "block", "jelly_lamp")
+    save(tex_angler_lantern(), "block", "angler_lantern")
+    save(particle_plankton(), "particle", "plankton")
+    write_json(os.path.join(ASSETS, "particles", "plankton.json"), {"textures": [m("plankton")]})
+
+    # blocks
+    bmodel("glow_anemone", {"parent": "minecraft:block/cross", "textures": {"cross": m("block/glow_anemone")}})
+    bs("glow_anemone", {"": {"model": m("block/glow_anemone")}})
+    item_generated("glow_anemone", m("block/glow_anemone"))
+    bmodel("jelly_lamp", {"parent": "minecraft:block/cube_all", "textures": {"all": m("block/jelly_lamp")}})
+    bs("jelly_lamp", {"": {"model": m("block/jelly_lamp")}})
+    item_block("jelly_lamp")
+    lt = "#t"
+    six = ("down", "up", "north", "south", "west", "east")
+    bmodel("angler_lantern", {"parent": "minecraft:block/block", "ambientocclusion": False,
+                              "textures": {"t": m("block/angler_lantern"), "particle": m("block/angler_lantern")},
+                              "elements": [
+                                  {"from": [4, 0, 4], "to": [12, 8, 12], "faces": {
+                                      "down": {"texture": lt, "uv": [8, 0, 16, 8]}, "up": {"texture": lt, "uv": [8, 0, 16, 8]},
+                                      **{d: {"texture": lt, "uv": [0, 1, 8, 9]} for d in ("north", "south", "west", "east")}}},
+                                  {"from": [5, 8, 5], "to": [11, 10, 11], "faces": {
+                                      "up": {"texture": lt, "uv": [9, 1, 15, 7]},
+                                      **{d: {"texture": lt, "uv": [0, 10, 6, 12]} for d in ("north", "south", "west", "east")}}}]})
+    bs("angler_lantern", {"": {"model": m("block/angler_lantern")}})
+    item_block("angler_lantern")
+
+    for name in ("glimmerfin", "sunscale_carp", "cooked_sunscale_carp", "piranha", "cooked_piranha", "barracuda_fillet",
+                 "cooked_barracuda_fillet", "jelly_gel", "stingray_barb", "piranha_tooth", "angler_lure", "hermit_shell",
+                 "glimmerfin_bucket", "sunscale_carp_bucket", "seahorse_bucket", "sea_bunny_bucket", "piranha_bucket"):
+        item_generated(name)
+    for egg in ("glimmerfin", "sunscale_carp", "sea_bunny", "hermit_crab", "seahorse", "drift_jelly", "stingray", "piranha",
+                "reef_barracuda", "deep_angler"):
+        imodel(egg + "_spawn_egg", {"parent": "minecraft:item/template_spawn_egg"})
+
+    # loot
+    for name in ("angler_lantern", "jelly_lamp"):
+        loot_self(name)
+    loot_silk_only("glow_anemone")
+    on_fire = {"function": "minecraft:furnace_smelt", "conditions": [{"condition": "minecraft:entity_properties", "entity": "this",
+                                                                      "predicate": {"flags": {"is_on_fire": True}}}]}
+    entity_loot("glimmerfin", [drop_pool(m("glimmerfin"), 1, 1, looting=False)])
+    entity_loot("sunscale_carp", [drop_pool(m("sunscale_carp"), 1, 1, looting=False, extra_functions=[on_fire])])
+    entity_loot("sea_bunny", [drop_pool("minecraft:slime_ball", 0, 1)])
+    entity_loot("hermit_crab", [drop_pool(m("hermit_shell"), 0, 1)])
+    entity_loot("seahorse", [])
+    entity_loot("drift_jelly", [drop_pool(m("jelly_gel"), 1, 2)])
+    entity_loot("stingray", [drop_pool(m("stingray_barb"), 0, 1)])
+    entity_loot("piranha", [drop_pool(m("piranha"), 1, 1, looting=False, extra_functions=[on_fire]), drop_pool(m("piranha_tooth"), 0, 1)])
+    entity_loot("reef_barracuda", [drop_pool(m("barracuda_fillet"), 1, 2, extra_functions=[on_fire])])
+    entity_loot("deep_angler", [drop_pool(m("angler_lure"), 1, 1, looting=False), drop_pool("minecraft:bone_meal", 1, 3)])
+
+    # recipes
+    for raw, cooked in (("sunscale_carp", "cooked_sunscale_carp"), ("piranha", "cooked_piranha"), ("barracuda_fillet", "cooked_barracuda_fillet")):
+        for kind, t in (("smelting", 200), ("smoking", 100), ("campfire_cooking", 600)):
+            recipe(f"{cooked}_from_{kind}", {"type": f"minecraft:{kind}", "category": "food", "ingredient": {"item": m(raw)},
+                                             "result": {"id": m(cooked)}, "experience": 0.35, "cookingtime": t})
+    shaped("angler_lantern", [" N ", "GLG", " G "], {"N": "minecraft:iron_nugget", "G": "minecraft:glass", "L": m("angler_lure")}, m("angler_lantern"))
+    shaped("jelly_lamp", ["JJ", "JJ"], {"J": m("jelly_gel")}, m("jelly_lamp"))
+    shapeless("bone_meal_from_hermit_shell", [m("hermit_shell")], "minecraft:bone_meal", 3)
+
+    # tags
+    sea = [m(n) for n in ("glimmerfin", "sunscale_carp", "sea_bunny", "seahorse", "drift_jelly", "stingray", "piranha",
+                          "reef_barracuda", "deep_angler")]
+    tag("entity_type", os.path.join(ROOT, "data", NS), "aquatic_predators", [
+        m("reef_barracuda"), m("piranha"), "minecraft:dolphin", "minecraft:axolotl", "minecraft:guardian",
+        "minecraft:elder_guardian", "minecraft:drowned"])
+    tag("entity_type", MC_DATA, "can_breathe_under_water", sea + [m("hermit_crab")])
+    tag("entity_type", MC_DATA, "aquatic", sea)
+    tag("entity_type", MC_DATA, "axolotl_hunt_targets", [m("glimmerfin"), m("sunscale_carp"), m("piranha")])
+    tag("entity_type", MC_DATA, "axolotl_always_hostiles", [m("reef_barracuda"), m("deep_angler")])
+    tag("block", MC_DATA, "mineable/pickaxe", [m("angler_lantern")])
+
+    # worldgen: glowing anemone reefs
+    wg = os.path.join(DATA, "worldgen")
+    anemone = {"Name": m("glow_anemone"), "Properties": {"waterlogged": "true"}}
+    write_json(os.path.join(wg, "configured_feature", "glow_anemone_reef.json"), {"type": "minecraft:random_patch", "config": {
+        "tries": 28, "xz_spread": 6, "y_spread": 2,
+        "feature": {"feature": {"type": "minecraft:simple_block", "config": {"to_place": {"type": "minecraft:simple_state_provider", "state": anemone}}},
+                    "placement": [{"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:all_of", "predicates": [
+                        {"type": "minecraft:matching_blocks", "blocks": "minecraft:water"},
+                        {"type": "minecraft:would_survive", "state": anemone}]}}]}}})
+    write_json(os.path.join(wg, "placed_feature", "glow_anemone_reef.json"), {"feature": m("glow_anemone_reef"), "placement": [
+        {"type": "minecraft:rarity_filter", "chance": 3},
+        {"type": "minecraft:in_square"},
+        {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
+        {"type": "minecraft:biome"}]})
+
+    lang = {
+        "itemGroup.wackyupdate.aquatic": "WackyUpdate: Aquatic",
+        "entity.wackyupdate.glimmerfin": "Glimmerfin", "entity.wackyupdate.sunscale_carp": "Sunscale Carp",
+        "entity.wackyupdate.sea_bunny": "Sea Bunny", "entity.wackyupdate.hermit_crab": "Hermit Crab",
+        "entity.wackyupdate.seahorse": "Seahorse", "entity.wackyupdate.drift_jelly": "Drift Jelly",
+        "entity.wackyupdate.stingray": "Stingray", "entity.wackyupdate.piranha": "Piranha",
+        "entity.wackyupdate.reef_barracuda": "Reef Barracuda", "entity.wackyupdate.deep_angler": "Deep Angler",
+        "item.wackyupdate.glimmerfin": "Glimmerfin", "item.wackyupdate.sunscale_carp": "Raw Sunscale Carp",
+        "item.wackyupdate.cooked_sunscale_carp": "Cooked Sunscale Carp", "item.wackyupdate.piranha": "Raw Piranha",
+        "item.wackyupdate.cooked_piranha": "Cooked Piranha", "item.wackyupdate.barracuda_fillet": "Raw Barracuda Fillet",
+        "item.wackyupdate.cooked_barracuda_fillet": "Cooked Barracuda Fillet", "item.wackyupdate.jelly_gel": "Jelly Gel",
+        "item.wackyupdate.stingray_barb": "Stingray Barb", "item.wackyupdate.piranha_tooth": "Piranha Tooth",
+        "item.wackyupdate.angler_lure": "Angler Lure", "item.wackyupdate.hermit_shell": "Hermit Shell",
+        "item.wackyupdate.glimmerfin_bucket": "Bucket of Glimmerfin", "item.wackyupdate.sunscale_carp_bucket": "Bucket of Sunscale Carp",
+        "item.wackyupdate.seahorse_bucket": "Bucket of Seahorse", "item.wackyupdate.sea_bunny_bucket": "Bucket of Sea Bunny",
+        "item.wackyupdate.piranha_bucket": "Bucket of Piranha",
+        "block.wackyupdate.angler_lantern": "Angler Lantern", "block.wackyupdate.jelly_lamp": "Jelly Lamp",
+        "block.wackyupdate.glow_anemone": "Glow Anemone",
+    }
+    for egg in ("glimmerfin", "sunscale_carp", "sea_bunny", "hermit_crab", "seahorse", "drift_jelly", "stingray", "piranha",
+                "reef_barracuda", "deep_angler"):
+        lang[f"item.wackyupdate.{egg}_spawn_egg"] = lang[f"entity.wackyupdate.{egg}"] + " Spawn Egg"
+    return lang
 
 
 # ============================================================================================ main
@@ -1573,6 +2025,7 @@ def main():
         "message.wackyupdate.dummy_hit": "Dummy took %s damage",
         "message.wackyupdate.glimmer_night": "It's a Glimmer Night... the fireflies are out.",
     }
+    lang.update(aquatic_assets())
     write_json(os.path.join(ASSETS, "lang", "en_us.json"), lang)
     print("assets generated")
 
