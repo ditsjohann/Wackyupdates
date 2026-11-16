@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "wackyupdate:block/skate_rail"
+    },
+    "axis=x": {
+      "model": "wackyupdate:block/skate_rail",
+      "y": 90
+    }
+  }
+}

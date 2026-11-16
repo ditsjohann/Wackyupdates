@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "IFI"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:leather_boots"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "F": {
+      "item": "wackyupdate:compacted_feet_block"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:rollerskates",
+    "count": 1
+  }
+}

@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "wackyupdate",
+	"version": "${version}",
+	"name": "WackyUpdate-V1",
+	"description": "Speculum crystals, prism glass, gravel mites, rollerskates, ragdolls, lightshows and a handful of odd new critters.",
+	"authors": ["ditsjohann"],
+	"contact": {},
+	"license": "All-Rights-Reserved",
+	"icon": "assets/wackyupdate/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.wackyupdate.WackyUpdate"],
+		"client": ["com.wackyupdate.client.WackyUpdateClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

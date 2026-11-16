@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:speculum_helmet",
+    "wackyupdate:speculum_chestplate",
+    "wackyupdate:speculum_leggings",
+    "wackyupdate:speculum_boots",
+    "wackyupdate:rollerskates"
+  ]
+}

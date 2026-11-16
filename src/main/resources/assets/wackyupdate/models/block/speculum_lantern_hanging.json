@@ -1,0 +1,228 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "lantern": "wackyupdate:block/speculum_lantern",
+    "particle": "wackyupdate:block/speculum_lantern"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            9,
+            6,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            9,
+            6,
+            15
+          ]
+        },
+        "north": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            2,
+            6,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            2,
+            6,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            2,
+            6,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#lantern",
+          "uv": [
+            0,
+            2,
+            6,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        9,
+        6
+      ],
+      "to": [
+        10,
+        11,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            4,
+            10,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            4,
+            10,
+            8
+          ]
+        },
+        "north": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            2,
+            10,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            2,
+            10,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            2,
+            10,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#lantern",
+          "uv": [
+            6,
+            2,
+            10,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        11,
+        8
+      ],
+      "to": [
+        9,
+        17,
+        8
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "texture": "#lantern",
+          "uv": [
+            11,
+            0,
+            13,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#lantern",
+          "uv": [
+            11,
+            0,
+            13,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        11,
+        7
+      ],
+      "to": [
+        8,
+        17,
+        9
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "west": {
+          "texture": "#lantern",
+          "uv": [
+            11,
+            0,
+            13,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#lantern",
+          "uv": [
+            11,
+            0,
+            13,
+            2
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "key": {
+    "B": {
+      "item": "wackyupdate:polished_speculum"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:speculum_bricks",
+    "count": 4
+  }
+}

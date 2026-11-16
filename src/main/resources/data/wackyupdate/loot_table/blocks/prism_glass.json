@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "wackyupdate:blocks/prism_glass",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wackyupdate:prism_glass",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "wackyupdate:prism_glass",
+              "properties": [
+                "color"
+              ]
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:slickwood_log",
+    "wackyupdate:stripped_slickwood_log",
+    "wackyupdate:slickwood_planks",
+    "wackyupdate:slickwood_ramp",
+    "wackyupdate:slickwood_floor",
+    "wackyupdate:slickwood_slab",
+    "wackyupdate:slickwood_stairs",
+    "wackyupdate:slickwood_fence"
+  ]
+}

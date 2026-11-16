@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:speculum_cluster",
+    "wackyupdate:large_speculum_bud",
+    "wackyupdate:medium_speculum_bud",
+    "wackyupdate:small_speculum_bud",
+    "wackyupdate:budding_speculum",
+    "wackyupdate:speculum_block",
+    "wackyupdate:polished_speculum",
+    "wackyupdate:speculum_bricks",
+    "wackyupdate:prism_tiles",
+    "minecraft:amethyst_cluster",
+    "minecraft:amethyst_block"
+  ]
+}

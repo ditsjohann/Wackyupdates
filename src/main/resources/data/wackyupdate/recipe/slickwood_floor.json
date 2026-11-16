@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "wackyupdate:slickwood_slab"
+    },
+    {
+      "item": "wackyupdate:slickwood_slab"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
+  ],
+  "result": {
+    "id": "wackyupdate:slickwood_floor",
+    "count": 6
+  }
+}

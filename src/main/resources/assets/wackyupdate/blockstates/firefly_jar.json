@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "wackyupdate:block/firefly_jar"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "wackyupdate:slickwood_planks"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:slickwood_slab",
+    "count": 6
+  }
+}

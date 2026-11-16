@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "wackyupdate:block/small_speculum_bud"
+    },
+    "facing=down": {
+      "model": "wackyupdate:block/small_speculum_bud",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "wackyupdate:block/small_speculum_bud",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "wackyupdate:block/small_speculum_bud",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "wackyupdate:block/small_speculum_bud",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "wackyupdate:block/small_speculum_bud",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

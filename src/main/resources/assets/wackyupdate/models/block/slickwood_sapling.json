@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "wackyupdate:block/slickwood_sapling"
+  }
+}

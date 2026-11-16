@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "wackyupdate:block/speculum_lantern"
+    },
+    "hanging=true": {
+      "model": "wackyupdate:block/speculum_lantern_hanging"
+    }
+  }
+}

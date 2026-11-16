@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:slickwood_planks",
+    "wackyupdate:slickwood_ramp",
+    "wackyupdate:slickwood_floor",
+    "wackyupdate:slickwood_slab",
+    "wackyupdate:slickwood_stairs",
+    "wackyupdate:skate_rail",
+    "wackyupdate:boost_pad",
+    "wackyupdate:stripped_slickwood_log",
+    "wackyupdate:polished_speculum",
+    "wackyupdate:prism_tiles",
+    "minecraft:smooth_stone",
+    "minecraft:smooth_stone_slab",
+    "minecraft:polished_andesite",
+    "minecraft:polished_diorite",
+    "minecraft:polished_granite",
+    "minecraft:smooth_quartz",
+    "minecraft:packed_ice",
+    "minecraft:blue_ice"
+  ]
+}

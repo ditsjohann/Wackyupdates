@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wackyupdate:block/slickwood_slab"
+    },
+    "type=top": {
+      "model": "wackyupdate:block/slickwood_slab_top"
+    },
+    "type=double": {
+      "model": "wackyupdate:block/slickwood_planks"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "wackyupdate:budding_speculum",
+    "wackyupdate:speculum_cluster",
+    "wackyupdate:large_speculum_bud",
+    "wackyupdate:medium_speculum_bud",
+    "wackyupdate:small_speculum_bud",
+    "wackyupdate:speculum_lantern",
+    "wackyupdate:speculum_block",
+    "wackyupdate:polished_speculum",
+    "wackyupdate:speculum_bricks",
+    "wackyupdate:prism_tiles",
+    "wackyupdate:skate_rail",
+    "wackyupdate:boost_pad",
+    "wackyupdate:prism_projector"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "wackyupdate:speculum_shard"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:speculum_block",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "key": {
+    "P": {
+      "item": "wackyupdate:prism_glass"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:prism_tiles",
+    "count": 4
+  }
+}

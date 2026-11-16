@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "wackyupdate:block/prism_projector_side",
+    "up": "wackyupdate:block/prism_projector_front",
+    "down": "wackyupdate:block/prism_projector_back",
+    "north": "wackyupdate:block/prism_projector_side",
+    "south": "wackyupdate:block/prism_projector_side",
+    "east": "wackyupdate:block/prism_projector_side",
+    "west": "wackyupdate:block/prism_projector_side"
+  }
+}

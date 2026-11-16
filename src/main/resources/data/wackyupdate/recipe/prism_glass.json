@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GSG",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "S": {
+      "item": "wackyupdate:speculum_shard"
+    }
+  },
+  "result": {
+    "id": "wackyupdate:prism_glass",
+    "count": 8,
+    "components": {
+      "minecraft:block_state": {
+        "color": "white"
+      }
+    }
+  }
+}

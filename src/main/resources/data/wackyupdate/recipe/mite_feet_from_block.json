@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "wackyupdate:compacted_feet_block"
+    }
+  ],
+  "result": {
+    "id": "wackyupdate:mite_foot",
+    "count": 10
+  }
+}

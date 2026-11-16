@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "wackyupdate:block/stripped_slickwood_log"
+    },
+    "axis=z": {
+      "model": "wackyupdate:block/stripped_slickwood_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "wackyupdate:block/stripped_slickwood_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

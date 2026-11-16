@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "wackyupdate:block/small_speculum_bud"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wackyupdate:block/medium_speculum_bud"
+  }
+}

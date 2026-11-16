@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "wackyupdate:block/slickwood_ramp"
+    },
+    "facing=east": {
+      "model": "wackyupdate:block/slickwood_ramp",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "wackyupdate:block/slickwood_ramp",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "wackyupdate:block/slickwood_ramp",
+      "y": 270
+    }
+  }
+}
